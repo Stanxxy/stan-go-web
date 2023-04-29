@@ -1,9 +1,9 @@
 {
   "name": "go-web",
   "description": "Modern Web Application with Golang",
-  "website": "https://github.com/StarpTech/go-web",
-  "repository": "https://github.com/StarpTech/go-web",
-  "logo": "https://github.com/StarpTech/go-web/raw/master/big-gopher.png",
+  "website": "https://github.com/Stanxxy/stan-go-web",
+  "repository": "https://github.com/Stanxxy/stan-go-web",
+  "logo": "https://github.com/Stanxxy/stan-go-web/raw/master/big-gopher.png",
   "success_url": "/",
   "keywords": [
     "starter-kit",

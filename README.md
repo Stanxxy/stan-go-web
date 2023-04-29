@@ -1,8 +1,8 @@
 ![big-gopher](big-gopher.png)
 
 [![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](http://opensource.org/licenses/MIT)
-[![Build Status](https://github.com/StarpTech/go-web/workflows/Go/badge.svg)](https://github.com/StarpTech/go-web/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/StarpTech/go-web)](https://goreportcard.com/report/github.com/StarpTech/go-web)
+[![Build Status](https://github.com/Stanxxy/stan-go-web/workflows/Go/badge.svg)](https://github.com/Stanxxy/stan-go-web/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Stanxxy/stan-go-web)](https://goreportcard.com/report/github.com/Stanxxy/stan-go-web)
 
 # Go-Web
 
@@ -109,7 +109,7 @@ $ git push origin v0.1.0 # => want to release v0.1.0
 # Documentation
 
 ```
-$ godoc github.com/starptech/go-web/pkg/controller
+$ godoc github.com/Stanxxy/stan-go-web/pkg/controller
 $ godoc -http=:6060
 ```
 
@@ -127,7 +127,7 @@ http://localhost:8111/
 
 ## Deploy on Heroku
 
-[![Heroku Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/StarpTech/go-web)
+[![Heroku Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Stanxxy/stan-go-web)
 
 # Further reading
 

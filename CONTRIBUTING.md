@@ -12,7 +12,7 @@ Prerequisites:
 Clone `goweb` anywhere:
 
 ```sh
-$ git clone git@github.com:StarpTech/go-web.git
+$ git clone git@github.com:Stanxxy/stan-go-web.git
 ```
 
 Install the build and lint dependencies:
