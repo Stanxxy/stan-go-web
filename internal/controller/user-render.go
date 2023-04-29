@@ -3,18 +3,18 @@ package controller
 import (
 	"net/http"
 
-	"github.com/labstack/echo/v4"
 	"github.com/Stanxxy/stan-go-web/internal/context"
 	"github.com/Stanxxy/stan-go-web/internal/core/errors"
 	"github.com/Stanxxy/stan-go-web/internal/models"
+	"github.com/labstack/echo/v4"
 )
 
-type (
-	UserList          struct{}
-	UserListViewModel struct {
-		Users []UserViewModel
-	}
-)
+// type (
+// 	UserList          struct{}
+// 	UserListViewModel struct {
+// 		Users []UserViewModel
+// 	}
+// )
 
 func (ctrl UserList) GetUsersAndRender(c echo.Context) error {
 	cc := c.(*context.AppContext)

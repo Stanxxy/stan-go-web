@@ -4,12 +4,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/Stanxxy/stan-go-web/config"
 	"github.com/Stanxxy/stan-go-web/internal/core"
 	"github.com/Stanxxy/stan-go-web/internal/models"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var e struct {
@@ -41,8 +41,8 @@ func setup() {
 	userCtrl := &User{}
 	healthCtrl := &Healthcheck{}
 
-	g := e.server.Echo.Group("/api")
-	g.GET("/users/:id", userCtrl.GetUserJSON)
+	// g := e.server.Echo.Group("/api")
+	// g.GET("/users/:id", userCtrl.GetUserJSON)
 
 	u := e.server.Echo.Group("/users")
 	u.GET("/:id", userCtrl.GetUser)

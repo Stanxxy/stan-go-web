@@ -3,19 +3,19 @@ package controller
 import (
 	"net/http"
 
-	"github.com/labstack/echo/v4"
 	"github.com/Stanxxy/stan-go-web/internal/context"
 	"github.com/Stanxxy/stan-go-web/internal/core/errors"
 	"github.com/Stanxxy/stan-go-web/internal/models"
+	"github.com/labstack/echo/v4"
 )
 
-type (
-	User          struct{}
-	UserViewModel struct {
-		Name string
-		ID   string
-	}
-)
+// type (
+// 	User          struct{}
+// 	UserViewModel struct {
+// 		Name string
+// 		ID   string
+// 	}
+// )
 
 func (ctrl User) AddUser(c echo.Context) error {
 
@@ -25,9 +25,7 @@ func (ctrl User) AddUser(c echo.Context) error {
 
 	// user := models.User{}
 
-	if err := c.BindJSON(&user); err != nil {
-        return err
-    }
+	err := cc.Bind(&user)
 
 	if err != nil {
 		b := errors.NewBoom(errors.InvalidBindingModel, errors.ErrorText(errors.InvalidBindingModel), err)
@@ -35,7 +33,7 @@ func (ctrl User) AddUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, b)
 	}
 
-	err := cc.UserStore.Create(&user)
+	err = cc.UserStore.Create(&user)
 
 	if err != nil {
 		b := errors.NewBoom(errors.EntityCreationError, errors.ErrorText(errors.EntityCreationError), err)
@@ -51,7 +49,7 @@ func (ctrl User) AddUser(c echo.Context) error {
 	// }
 
 	// Do something with the user object
-    return c.String(http.StatusOK, "User created")
+	return c.String(http.StatusOK, "User created")
 	// return c.JSON(http.StatusOK, vm)
 
 }

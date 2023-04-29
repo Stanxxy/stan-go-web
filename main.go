@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 
+	"github.com/Stanxxy/stan-go-web/config"
+	"github.com/Stanxxy/stan-go-web/internal/controller"
+	"github.com/Stanxxy/stan-go-web/internal/core"
+	"github.com/Stanxxy/stan-go-web/internal/models"
 	"github.com/labstack/echo/v4"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/starptech/go-web/config"
-	"github.com/starptech/go-web/internal/controller"
-	"github.com/starptech/go-web/internal/core"
-	"github.com/starptech/go-web/internal/models"
 )
 
 func main() {
@@ -27,12 +27,14 @@ func main() {
 
 	// api endpoints
 	g := server.Echo.Group("/api")
-	g.GET("/users/:id", userCtrl.GetUserJSON)
+	g.GET("/getUser/:id", userCtrl.GetUser)
+	g.GET("/getUsers", userListCtrl.GetUsers)
+	g.GET("/addUser", userCtrl.AddUser)
 
 	// pages
-	u := server.Echo.Group("/users")
-	u.GET("", userListCtrl.GetUsers)
-	u.GET("/:id", userCtrl.GetUser)
+	// u := server.Echo.Group("/users")
+	// u.GET("", userListCtrl.GetUsers)
+	// u.GET("/:id", userCtrl.GetUser)
 
 	// metric / health endpoint according to RFC 5785
 	server.Echo.GET("/.well-known/health-check", healthCtrl.GetHealthcheck)
