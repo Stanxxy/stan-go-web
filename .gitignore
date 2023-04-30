@@ -53,6 +53,7 @@ junit-results
 cypress/screenshots
 cypress/videos
 coverage.txt
+web/build
 
 # gcloud utils
 cloud_sql_proxy
@@ -65,3 +66,6 @@ air.log
 # test data
 cockroach-data
 bin
+
+# confidential information
+docs/api-info.md
