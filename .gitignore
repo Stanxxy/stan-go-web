@@ -69,3 +69,4 @@ bin
 
 # confidential information
 docs/api-info.md
+docs/.*
