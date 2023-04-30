@@ -16,6 +16,7 @@ tmp
 web/node_modules
 web/.pnp
 web/.pnp.js
+web/build
 
 # testing
 web/coverage
