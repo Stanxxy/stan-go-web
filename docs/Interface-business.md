@@ -1,4 +1,4 @@
-## RESTful Business Module API document
+# RESTful Business Module API document
 
 
 
@@ -50,7 +50,7 @@
     "msg": "Get business list successful",  // 提示信息
     "data": [
         {
-            "bid": "2312f12dab003e0e",
+            "uid": "2312f12dab003e0e",
             "business_name": "foodiePath",
             "business_address": "635 Lexington Ave",
             "business_phoneNum": "4699559587",
@@ -66,7 +66,7 @@
             "reason": ""
         },
         {
-            "bid": "25411b45452abc76f",
+            "uid": "25411b45452abc76f",
             "business_name": "bestieShop",
             "business_address": "635 3rd Ave",
             "business_phoneNum": "4699165558",
@@ -142,7 +142,7 @@ For more return state please check return state table
     "msg": "Get business list successful",  // 提示信息
     "data": [
         {
-            "bid": "2312f12dab003e0e",
+            "uid": "2312f12dab003e0e",
             "business_name": "foodiePath",
             "business_address": "635 Lexington Ave",
             "business_phoneNum": "4699559587",
@@ -158,7 +158,7 @@ For more return state please check return state table
             "reason": ""
         },
         {
-            "bid": "25411b45452abc76f",
+            "uid": "25411b45452abc76f",
             "business_name": "bestieShop",
             "business_address": "635 3rd Ave",
             "business_phoneNum": "4699165558",
@@ -178,78 +178,6 @@ For more return state please check return state table
 ```
 
 ### 2.6 Miscellaneous  
-
-For more return state please check return state table  
-
-[Return State Table](URL/for/api/responseCode/table)  
-
-
-## 3 Get Business Food Interface 
-
-### 3.1 Interface Description    
-
-- Get the food provide by a business
-
-### 3.2 Address  
-
-`{apiAddress}/api/business/get-businesses-food`
-
-### 3.3 Request Type  
-
-**POST**  
-
-### 3.4 Request Parameters  
-
-#### 3.4.1 Header Parameters  
-
-| Key       | Must | Type/Value      | Note         |
-| ------------ | ---- | ---------------- | ------------ |
-| Content-Type | Yes   | application/json | Request parameter type |
-
-#### 3.4.2 Body Parameters  
-
-| Key    | Must | Type   | Limit        | Note     |
-| --------- | ---- | ------ | --------------- | -------- |
-| bid   | Yes | string | 1 < length < 20 | business id to locate a business |
-| startNum | Yes | int | 1 < value | start index of the food in the sorted list |
-| quantity   | Yes | int | startNum < value | end index of the food in the sorted list |
-
-
-**Special Note**:
-1. We could add uid as an input here, once we could do personalized recommendation
-2. We cache all the in-day food in Cassandra
-3. 
-
-### 3.5 Sample Response
-
-```json
-{
-    "code": 200,  // 状态码
-    "msg": "Get business list successful",  // 提示信息
-    "data": [
-        {
-            "bid": "2312f12dab003e0e",
-            "food_name": "foodiePathPie",
-            "food_ingradients": ["apple", "power","eggs"],
-            "food_notes": "Clients may get allergic against blablabla",
-            "food_order_cut_time": "20230501T23:59:59",
-            "is_permanent": 1,
-            "pic": "<picurl>"
-        },
-        {
-            "bid": "25411b45452abc76f",
-            "food_name": "bestieShopBowl",
-            "food_ingradients": ["white rice", "cucumber","mushroom"],
-            "food_notes": "Much carbon, may cause food coma",
-            "food_order_cut_time": "202300501T21:59:59",
-            "is_permanent": 0,
-            "pic": "<picurl>"
-        }
-    ] 
-}
-```
-
-### 3.6 Miscellaneous  
 
 For more return state please check return state table  
 
