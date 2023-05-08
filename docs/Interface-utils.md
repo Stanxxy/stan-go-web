@@ -172,7 +172,7 @@ For more return state please check return state table
 
 ### 4.3 Request Type  
 
-**POST**  
+**GET**  
 
 ### 4.4 Request Parameters  
 
