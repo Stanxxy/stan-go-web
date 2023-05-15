@@ -151,7 +151,7 @@ For more return state please check return state table
 
 ### 3.3 Request Type  
 
-**POST**  
+**PUT**  
 
 ### 3.4 Request Parameters  
 
@@ -179,8 +179,7 @@ For more return state please check return state table
     "data": null  // 返回内容
 }
 ```
-
-​    
+  
 
 ### 3.6 Miscellaneous  
 

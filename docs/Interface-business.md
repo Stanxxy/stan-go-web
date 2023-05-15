@@ -15,7 +15,7 @@
 
 ### 1.3 Request Type  
 
-**POST**  
+**GET**  
 
 ### 1.4 Request Parameters  
 
@@ -105,7 +105,7 @@ For more return state please check return state table
 
 ### 2.3 Request Type  
 
-**POST**  
+**GET**  
 
 ### 2.4 Request Parameters  
 

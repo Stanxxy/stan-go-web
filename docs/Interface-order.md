@@ -62,7 +62,7 @@
               {"waiting for payment": "<datetime>"},
               {"order paid": "<datetime>"},
               {"shipped": "<datetime>"},
-              ]
+              ],
             "host_info": {
               "host_name": "Stan Liu",
               "host_address": "125 Lexington Ave."
@@ -134,6 +134,8 @@ For more return state please check return state table
 [Return State Table](URL/for/api/responseCode/table)  
 
 
+
+
 ## 3 Cancel Order Interface
 
 ### 3.1 Interface Description    
@@ -199,7 +201,7 @@ For more return state please check return state table
 
 ### 4.3 Request Type  
 
-**POST**  
+**GET**  
 
 ### 4.4 Request Parameters  
 
@@ -271,7 +273,7 @@ For more return state please check return state table
 
 ### 5.3 Request Type  
 
-**POST**  
+**GET**  
 
 ### 5.4 Request Parameters  
 

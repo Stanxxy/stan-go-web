@@ -1,18 +1,18 @@
 # RESTful Util Module API document  
 
-## 1 Get State Interface 
+## 1 Get States Interface 
 
 ### 1.1 Interface Description    
 
-- Get state from database
+- Get available US states from database
 
 ### 1.2 Address  
 
-`{apiAddress}/api/utils/get-state`  
+`{apiAddress}/api/utils/get-states`  
 
 ### 1.3 Request Type  
 
-**POST**  
+**GET**  
 
 ### 1.4 Request Parameters  
 
@@ -64,7 +64,7 @@ For more return state please check return state table
 
 ### 2.3 Request Type  
 
-**POST**  
+**GET**  
 
 ### 2.4 Request Parameters  
 
@@ -110,15 +110,15 @@ For more return state please check return state table
 ### 3.1 Interface Description    
 
 - Get Checkcode to prevent bot from register。
-- Could be outsourced to google api. (To be investigated)
+- Could be outsourced to google api. [To be investigated]
 
 ### 3.2 Address  
 
-`{apiAddress}/api/utils/get-cities`  
+`{apiAddress}/api/utils/get-checkcode`  
 
 ### 3.3 Request Type  
 
-**POST**  
+**GET**  
 
 ### 3.4 Request Parameters  
 
@@ -164,11 +164,11 @@ For more return state please check return state table
 
 ### 4.1 Interface Description    
 
-- Get City from database
+- Get waiver from database []
 
 ### 4.2 Address  
 
-`{apiAddress}/api/utils/get-cities`  
+`{apiAddress}/api/utils/get-waiver`  
 
 ### 4.3 Request Type  
 
@@ -186,7 +186,7 @@ For more return state please check return state table
 
 | Key    | Must | Type   | Limit        | Note     |
 | --------- | ---- | ------ | --------------- | -------- |
-| state   | Yes   | string | 1 < length < 50 | name of the state |
+| uid   | Yes | string | 1 < length < 20 | user id to get the order |
 
 **Special Note**: 
 1. at the moment we only support states in the US. In the future we may consider support more countries. 
@@ -198,10 +198,7 @@ For more return state please check return state table
     "code": 200,  // 状态码
     "msg": "Return available states",  // 提示信息
     "data": [
-      "New York",
-      "Long Island",
-      "Rochester",
-      "Albaney"
+      {"waiver": "<The content of the waiver>"}
     ]  // 返回内容
 }
 ```
