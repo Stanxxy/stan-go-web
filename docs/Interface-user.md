@@ -42,8 +42,8 @@
 
 | Interface Name   | Interface Address                               | Purpose           |
 | ---------- | -------------------------------------- | ------------------ |
-| Get Checkcode | `{apiAddress}/api/common/getCheckCode` | getNecessary Checkcode |
-| Get Waiver | `{apiAddress}/api/common/getWaiver` | get the Waiver needs to signed by user |
+| Get Checkcode | `{apiAddress}/api/utils/getCheckCode` | getNecessary Checkcode |
+| Get Waiver | `{apiAddress}/api/utils/getWaiver` | get the Waiver needs to signed by user |
 
 ​    
 
@@ -109,7 +109,7 @@ For more return state please check return state table
 
 | Interface Name   | Interface Address                               | Purpose           |
 | ---------- | -------------------------------------- | ------------------ |
-| Get Checkcode | `{apiAddress}/api/common/getCheckCode` | getNecessary Checkcode |
+| Get Checkcode | `{apiAddress}/api/utils/getCheckCode` | getNecessary Checkcode |
 
 ​    
 
@@ -151,7 +151,7 @@ For more return state please check return state table
 
 ### 3.3 Request Type  
 
-**POST**  
+**PUT**  
 
 ### 3.4 Request Parameters  
 
@@ -179,8 +179,7 @@ For more return state please check return state table
     "data": null  // 返回内容
 }
 ```
-
-​    
+  
 
 ### 3.6 Miscellaneous  
 
@@ -367,7 +366,7 @@ For more return state please check return state table
 
 | Interface Name   | Interface Address                               | Purpose           |
 | ---------- | -------------------------------------- | ------------------ |
-| Get Checkcode | `{apiAddress}/api/common/getCheckcode` | getNecessary Checkcode |
+| Get Checkcode | `{apiAddress}/api/utils/getCheckcode` | getNecessary Checkcode |
 
 ​    
 
