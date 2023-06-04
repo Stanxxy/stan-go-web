@@ -23,8 +23,6 @@ func (ctrl User) AddUser(c echo.Context) error {
 
 	var user models.User
 
-	// user := models.User{}
-
 	err := cc.Bind(&user)
 
 	if err != nil {
