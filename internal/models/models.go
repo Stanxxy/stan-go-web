@@ -6,8 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"database/sql"
+	"gorm.io/gorm"
+	"gorm.io/driver/postgres"
 	"github.com/Stanxxy/stan-go-web/config"
 )
 
@@ -15,7 +16,8 @@ import (
 type Model struct {
 	models map[string]reflect.Value
 	isOpen bool
-	*gorm.DB
+	DB *gorm.DB
+	Conn *sql.DB
 }
 
 // NewModel returns a new Model without opening database connection
@@ -33,17 +35,27 @@ func (m *Model) IsOpen() bool {
 
 // OpenWithConfig opens database connection with the settings found in cfg
 func (m *Model) OpenWithConfig(cfg *config.Configuration) error {
-	db, err := gorm.Open(cfg.Dialect, cfg.ConnectionString)
+
+	dsn := "host=localhost user=goweb dbname=goweb port=26257 sslmode=disable TimeZone=US/Eastern"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		return err
+	}
+
+	conn, err := db.DB()
+
 	if err != nil {
 		return err
 	}
 
 	// https://github.com/go-sql-driver/mysql/issues/461
-	db.DB().SetConnMaxLifetime(time.Minute * 5)
-	db.DB().SetMaxIdleConns(0)
-	db.DB().SetMaxOpenConns(20)
+	conn.SetConnMaxLifetime(time.Minute * 5)
+	conn.SetMaxIdleConns(0)
+	conn.SetMaxOpenConns(20)
 
 	m.DB = db
+	m.Conn = conn
 	m.isOpen = true
 	return nil
 }
@@ -74,17 +86,32 @@ func (m *Model) Register(values ...interface{}) error {
 	return nil
 }
 
+func (m *Model) InitAllTables() {
+	for _, v := range m.models{
+		m.DB.Migrator().DropTable(v.Interface())
+		m.DB.Migrator().CreateTable(v.Interface())	
+	}
+}
+
+func (m *Model) InitConstraints() {
+
+}
+
+func (m *Model) InitIndexies() {
+
+}
+
 // AutoMigrateAll runs migrations for all the registered models
 func (m *Model) AutoMigrateAll() {
 	for _, v := range m.models {
-		m.AutoMigrate(v.Interface())
+		m.DB.AutoMigrate(v.Interface())
 	}
 }
 
 // AutoDropAll drops all tables of all registered models
 func (m *Model) AutoDropAll() {
 	for _, v := range m.models {
-		m.DropTableIfExists(v.Interface())
+		m.DB.Migrator().DropTable(v.Interface())
 	}
 }
 
