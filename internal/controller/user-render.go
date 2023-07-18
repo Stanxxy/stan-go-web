@@ -1,68 +1,61 @@
 package controller
 
-import (
-	"net/http"
+// import (
+// 	"net/http"
 
-	"github.com/Stanxxy/stan-go-web/internal/context"
-	"github.com/Stanxxy/stan-go-web/internal/core/errors"
-	"github.com/Stanxxy/stan-go-web/internal/models"
-	"github.com/labstack/echo/v4"
-)
-
-// type (
-// 	UserList          struct{}
-// 	UserListViewModel struct {
-// 		Users []UserViewModel
-// 	}
+// 	"github.com/Stanxxy/stan-go-web/internal/context"
+// 	"github.com/Stanxxy/stan-go-web/internal/core/errors"
+// 	"github.com/Stanxxy/stan-go-web/internal/models"
+// 	"github.com/labstack/echo/v4"
 // )
 
-func (ctrl UserList) GetUsersAndRender(c echo.Context) error {
-	cc := c.(*context.AppContext)
+// func (ctrl UserList) GetUsersAndRender(c echo.Context) error {
+// 	cc := c.(*context.AppContext)
 
-	users := []models.User{}
+// 	users := []models.User{}
 
-	err := cc.UserStore.Find(&users)
+// 	err := cc.UserStore.Find(&users)
 
-	if err != nil {
-		b := errors.NewBoom(errors.UserNotFound, errors.ErrorText(errors.UserNotFound), err)
-		c.Logger().Error(err)
-		return c.JSON(http.StatusNotFound, b)
-	}
+// 	if err != nil {
+// 		b := errors.NewBoom(errors.UserNotFound, errors.ErrorText(errors.UserNotFound), err)
+// 		c.Logger().Error(err)
+// 		return c.JSON(http.StatusNotFound, b)
+// 	}
 
-	viewModel := UserListViewModel{
-		Users: make([]UserViewModel, len(users)),
-	}
+// 	viewModel := UserListViewModel{
+// 		Users: make([]UserViewModel, len(users)),
+// 	}
 
-	for index, user := range users {
-		viewModel.Users[index] = UserViewModel{
-			Name: user.Name,
-			ID:   user.ID,
-		}
-	}
+// 	for index, user := range users {
+// 		viewModel.Users[index] = UserViewModel{
+// 			Name: user.Name,
+// 			ID:   user.ID,
+// 		}
+// 	}
 
-	return c.Render(http.StatusOK, "user-list.html", viewModel)
+// 	return c.Render(http.StatusOK, "user-list.html", viewModel)
 
-}
+// }
 
-func (ctrl User) GetUserAndRender(c echo.Context) error {
-	cc := c.(*context.AppContext)
-	userID := c.Param("id")
+// func (ctrl User) GetUserAndRender(c echo.Context) error {
+// 	cc := c.(*context.AppContext)
+// 	userID := c.Param("id")
 
-	user := models.User{ID: userID}
+// 	user := models.User{ID: userID}
 
-	err := cc.UserStore.First(&user)
+// 	err := cc.UserStore.First(&user)
 
-	if err != nil {
-		b := errors.NewBoom(errors.UserNotFound, errors.ErrorText(errors.UserNotFound), err)
-		c.Logger().Error(err)
-		return c.JSON(http.StatusNotFound, b)
-	}
+// 	if err != nil {
+// 		b := errors.NewBoom(errors.UserNotFound, errors.ErrorText(errors.UserNotFound), err)
+// 		c.Logger().Error(err)
+// 		return c.JSON(http.StatusNotFound, b)
+// 	}
 
-	vm := UserViewModel{
-		Name: user.Name,
-		ID:   user.ID,
-	}
+// 	vm := UserViewModel{
+// 		Name: user.Name,
+// 		ID:   user.ID,
+// 	}
 
-	return c.Render(http.StatusOK, "user.html", vm)
+// 	return c.Render(http.StatusOK, "user.html", vm)
 
-}
+// }
