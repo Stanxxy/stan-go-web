@@ -30,7 +30,7 @@
 | Key    | Must | Type   | Limit        | Note     |
 | --------- | ---- | ------ | --------------- | -------- |
 | account   | Yes   | string | 1 < length < 50 | Account |
-| passcode  | Yes   | string | 1 < length < 50 | Passord     |
+| passwode  | Yes   | string | 1 < length < 50 | Password     |
 | email  | Yes   | string | 1 < length < 50 | email binded with the account  |
 | phoneNum  | Yes   | string | 1 < length < 20 | user phone number     |
 | checkCode | Yes   | string | length = 6      | Check Code   |
@@ -165,10 +165,29 @@ For more return state please check return state table
 
 | Key    | Mush | Type   | Limit        | Note     |
 | --------- | ---- | ------ | --------------- | -------- |
-| question   | Yes   | string | 1 < length < 50 | Passord Question |
-| answer  | Yes   | string | 1 < length < 50 | Answer for the Question |
+| QAPairs   | Yes   | json | length =3 | Passord Questions and Answer Pairs |
 | userId  | Yes   | string | 1 < length < 50 | UserId |
 
+**Special Note**: 
+1. QAPairs is a list of QA pairs. the data structure is json type:
+```
+[
+    {
+        "question1": "This is a sample question",
+        "answers1": "This is a sample answer"
+    },
+    {
+        "question2": "This is another sample question",
+        "answers2": "This is another sample answer"
+    },
+    {
+        "question3": "This is the last sample question",
+        "answers3": "This is the last sample answer"
+    }
+]
+```
+2. account, email and phoneNum cannot be None at the same time 
+3. Verification of the triple None logic should be put at frontend
 
 ### 3.5 Sample Response
 
@@ -197,7 +216,7 @@ For more return state please check return state table
 
 ### 4.2 Address  
 
-`{apiAddress}/api/user/get-question`  
+`{apiAddress}/api/user/get-questions-answers`  
 
 ### 4.3 Request Type  
 
@@ -216,7 +235,6 @@ For more return state please check return state table
 | Key    | Mush | Type   | Limit        | Note     |
 | --------- | ---- | ------ | --------------- | -------- |
 | userId   | Yes   | string | 1 < length < 50 | Account |
-| answer  | Yes   | string | 1 < length < 50 | Passord     |
 
 
 ### 4.5 Sample Response

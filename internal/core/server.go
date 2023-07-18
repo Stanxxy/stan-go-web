@@ -8,12 +8,13 @@ import (
 	"time"
 
 	"github.com/go-redis/redis"
-	"github.com/jinzhu/gorm"
-	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
+
 	"github.com/Stanxxy/stan-go-web/config"
 	"github.com/Stanxxy/stan-go-web/internal/cache"
 	"github.com/Stanxxy/stan-go-web/internal/i18n"
 	"github.com/Stanxxy/stan-go-web/internal/models"
+	"github.com/labstack/echo/v4"
 )
 
 type Server struct {
@@ -41,6 +42,39 @@ func NewServer(config *config.Configuration) *Server {
 	server.Echo = NewRouter(server)
 
 	return server
+}
+
+func (s *Server) InitDB() {
+	// migration for dev
+	// Do not init data. We will manually init data from cockroachdb interface
+
+	s.modelRegistry.AutoDropAll()
+
+	user := models.User{}
+	err := s.modelRegistry.Register(user)
+
+	userqa := models.UserQA{}
+	err = s.modelRegistry.Register(userqa)
+	if err != nil {
+		s.Echo.Logger.Fatal(err)
+	}
+
+	order := models.Order{}
+	err = s.modelRegistry.Register(order)
+	if err != nil {
+		s.Echo.Logger.Fatal(err)
+	}
+
+	orderDetails := models.OrderDetails{}
+	err = s.modelRegistry.Register(orderDetails)
+
+	food := models.Food{}
+	err = s.modelRegistry.Register(food)
+
+	cartItem := models.CartItem{}
+	err = s.modelRegistry.Register(cartItem)
+
+	s.modelRegistry.AutoMigrateAll()
 }
 
 // GetDB returns gorm (ORM)
@@ -92,8 +126,8 @@ func (s *Server) GracefulShutdown() {
 	}
 
 	// close database connection
-	if s.db != nil {
-		dErr := s.db.Close()
+	if s.modelRegistry.Conn != nil {
+		dErr := s.modelRegistry.Conn.Close()
 		if dErr != nil {
 			s.Echo.Logger.Fatal(dErr)
 		}

@@ -1,11 +1,11 @@
 package core
 
 import (
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 	"github.com/Stanxxy/stan-go-web/internal/context"
 	mid "github.com/Stanxxy/stan-go-web/internal/core/middleware"
 	"github.com/Stanxxy/stan-go-web/internal/i18n"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 
 	v "gopkg.in/go-playground/validator.v9"
 )
@@ -18,7 +18,7 @@ func NewRouter(server *Server) *echo.Echo {
 	cc := context.AppContext{
 		Cache:     &CacheStore{Cache: server.cache},
 		Config:    config,
-		UserStore: &UserStore{DB: server.db},
+		UserStore: &UserStore{DB: server.db, conn: server.modelRegistry.Conn},
 		Loc:       i18n.New(),
 	}
 

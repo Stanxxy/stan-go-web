@@ -1,4 +1,4 @@
-package core
+package middleware
 
 import (
 	"time"
@@ -19,6 +19,6 @@ func (s *CacheStore) Get(key string) (string, error) {
 	return s.Cache.Get(key).Result()
 }
 
-func (s *CacheStore) Set(key string, value interface{}, exp time.Duration) (string, error) {
-	return s.Cache.Set(key, value, exp).Result()
+func (s *CacheStore) Set(key string, value interface{}, exp time.Duration) error {
+	return s.Cache.Set(key, value, exp).Err()
 }

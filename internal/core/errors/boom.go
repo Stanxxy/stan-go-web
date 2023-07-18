@@ -3,15 +3,25 @@ package errors
 const (
 	InternalError       = "internalError"
 	UserNotFound        = "userNotFound"
+	InvalidUserInfo     = "invalidUserInfo"
 	InvalidBindingModel = "invalidBindingModel"
 	EntityCreationError = "entityCreationError"
+	EntityDeleteError = "entityDeleteError"
+	EntityUpdateError = "entityUpdateError"
+	EntityQueryError = "entityQueryError"
+	TypeConvertionError = "typeConvertionError"
 )
 
 var errorMessage = map[string]string{
 	"internalError":       "an internal error occured",
 	"userNotFound":        "user could not be found",
-	"invalidBindingModel": "model could not be bound",
-	"EntityCreationError": "could not create entity",
+	"invalidUserInfo":		"username or password is wrong",
+	"invalidBindingModel": 	"model could not be binded",
+	"entityCreationError": 	"could not create entity",
+	"entityDeleteError": 	"could not delete the entity",
+	"entityUpdateError": 	"could not update the entity",
+	"entityQueryError": 	"error thworn when query entity",
+	"typeConvertionError": 	"fail to convert type",
 }
 
 // Booms can contain multiple boom errors

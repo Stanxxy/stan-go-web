@@ -45,6 +45,22 @@ services:
       - "6379:6379"
     image: "redis:alpine"
 
+  # foodiePathSvc:
+  #   container_name: fpsvc
+  #   image: # The latest go container should be here
+  #   command: # start our service here
+  #   volumes:
+  #     - # the output dir of build
+  #   depends_on:
+  #     - roach1
+  #     - rouch2
+  #     - rouch3
+  #     - redis
+  #   networks:
+  #     roachnet:
+  #       aliases:
+  #         - roach3
+
 networks:
   roachnet:
     driver: bridge

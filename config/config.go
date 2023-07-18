@@ -16,6 +16,7 @@ type Configuration struct {
 	RedisAddr        string `env:"REDIS_ADDR" envDefault:":6379"`
 	RedisPwd         string `env:"REDIS_PWD"`
 	ConnectionString string `env:"CONNECTION_STRING,required"`
+	DSN              string `env:"DSN,required"`
 	IsProduction     bool   `env:"PRODUCTION"`
 	GrayLogAddr      string `env:"GRAYLOG_ADDR"`
 	RequestLogger    bool   `env:"REQUEST_LOGGER"`
@@ -26,11 +27,13 @@ type Configuration struct {
 }
 
 func NewConfig(files ...string) (*Configuration, error) {
+	// This part has never been used
 	err := godotenv.Load(files...)
 
 	if err != nil {
 		log.Printf("No .env file could be found %q\n", files)
 	}
+	// We should test this part to understand how it works
 
 	cfg := Configuration{}
 	err = env.Parse(&cfg)
