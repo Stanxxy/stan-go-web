@@ -6,13 +6,12 @@ import (
 	"github.com/Stanxxy/stan-go-web/internal/context"
 	"github.com/Stanxxy/stan-go-web/internal/core/errors"
 	"github.com/Stanxxy/stan-go-web/internal/models"
-	"github.com/Stanxxy/stan-go-web/internal/models/user"
 	echo "github.com/labstack/echo/v4"
 	"github.com/rs/xid"
 )
 
 // Only for testing
-func (ctrl User) AddUser(c echo.Context) error {
+func AddUser(c echo.Context) error {
 
 	cc := c.(*context.AppContext)
 
@@ -26,7 +25,7 @@ func (ctrl User) AddUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, b)
 	}
 
-	err = cc.UserStore.Create(&user)
+	_, err = cc.UserStore.Create(&user)
 
 	if err != nil {
 		b := errors.NewBoom(errors.EntityCreationError, errors.ErrorText(errors.EntityCreationError), err)
@@ -39,7 +38,7 @@ func (ctrl User) AddUser(c echo.Context) error {
 }
 
 // Only for testing
-func (ctrl User) RemoveUser(c echo.Context) error {
+func RemoveUser(c echo.Context) error {
 
 	cc := c.(*context.AppContext)
 
@@ -53,7 +52,7 @@ func (ctrl User) RemoveUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, b)
 	}
 
-	err = cc.UserStore.Delete(&user)
+	_, err = cc.UserStore.Delete(&user)
 
 	if err != nil {
 		b := errors.NewBoom(errors.EntityDeleteError, errors.ErrorText(errors.EntityDeleteError), err)
@@ -66,7 +65,7 @@ func (ctrl User) RemoveUser(c echo.Context) error {
 }
 
 // Only for testing
-func (ctrl User) UpdateUser(c echo.Context) error {
+func UpdateUser(c echo.Context) error {
 
 	cc := c.(*context.AppContext)
 
@@ -80,7 +79,7 @@ func (ctrl User) UpdateUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, b)
 	}
 
-	err = cc.UserStore.Save(&user)
+	_, err = cc.UserStore.Create(&user)
 
 	if err != nil {
 		b := errors.NewBoom(errors.EntityUpdateError, errors.ErrorText(errors.EntityUpdateError), err)
@@ -93,12 +92,12 @@ func (ctrl User) UpdateUser(c echo.Context) error {
 }
 
 // Only for testing
-func (ctrl UserList) GetUsers(c echo.Context) error {
+func GetUsers(c echo.Context) error {
 	cc := c.(*context.AppContext)
 
 	users := []models.User{}
 
-	err := cc.UserStore.RetrieveMany(&users)
+	_, err := cc.UserStore.RetrieveManyNoCondition(&users)
 
 	if err != nil {
 		b := errors.NewBoom(errors.UserNotFound, errors.ErrorText(errors.UserNotFound), err)
@@ -109,7 +108,7 @@ func (ctrl UserList) GetUsers(c echo.Context) error {
 }
 
 // Only for testing
-func (ctrl User) GetUser(c echo.Context) error {
+func GetUser(c echo.Context) error {
 	cc := c.(*context.AppContext)
 	userID, err := xid.FromString(c.Param("id"))
 
@@ -121,7 +120,7 @@ func (ctrl User) GetUser(c echo.Context) error {
 
 	user := models.User{ID: userID}
 
-	err = cc.UserStore.First(&user)
+	_, err = cc.UserStore.RetrieveOne(&user)
 
 	if err != nil {
 		b := errors.NewBoom(errors.UserNotFound, errors.ErrorText(errors.UserNotFound), err)

@@ -6,11 +6,11 @@ import (
 	"github.com/Stanxxy/stan-go-web/config"
 	"github.com/Stanxxy/stan-go-web/internal/controller"
 	"github.com/Stanxxy/stan-go-web/internal/core"
+
 	// "github.com/Stanxxy/stan-go-web/internal/models"
-	"github.com/labstack/echo/v4"
+	echo "github.com/labstack/echo/v4"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
-
 
 func main() {
 	config, err := config.NewConfig()
@@ -22,16 +22,13 @@ func main() {
 	// serve files for dev
 	server.ServeStaticFiles()
 
-	userCtrl := &controller.User{}
-	userListCtrl := &controller.UserList{}
 	healthCtrl := &controller.Healthcheck{}
 
 	// api endpoints
-	g := server.Echo.Group("/api")
-	g.GET("/getUser/:id", userCtrl.GetUser)
-	g.GET("/getUsers", userListCtrl.GetUsers)
-	g.POST("/addUser", userCtrl.AddUser)
 	controller.RegisterAuthRoutes(server)
+	controller.RegisterUserRoutes(server)
+	controller.RegisterBusinessRoutes(server)
+
 	// pages
 	// u := server.Echo.Group("/users")
 	// u.GET("", userListCtrl.GetUsers)
@@ -42,7 +39,7 @@ func main() {
 	server.Echo.GET("/.well-known/metrics", echo.WrapHandler(promhttp.Handler()))
 
 	// we will do migrate here
-	
+
 	server.InitDB()
 
 	// Start server

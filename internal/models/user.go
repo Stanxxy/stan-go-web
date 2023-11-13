@@ -1,11 +1,14 @@
 package models
 
 import (
+	"database/sql/driver"
+	"errors"
 	"time"
+
+	"encoding/json"
 
 	"github.com/rs/xid"
 	"gorm.io/gorm"
-	"encoding/json"
 )
 
 type AvailableTime struct {
@@ -17,29 +20,29 @@ type AvailableTime struct {
 }
 
 func (c *AvailableTime) Scan(value interface{}) error {
-    // Convert the value to a byte slice
-    bytes, ok := value.([]byte)
-    if !ok {
-        return errors.New("Failed to scan AvailableTime")
-    }
+	// Convert the value to a byte slice
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New("Failed to scan AvailableTime")
+	}
 
-    // Unmarshal the byte slice into the AvailableTime struct
-    err := json.Unmarshal(bytes, c)
-    if err != nil {
-        return err
-    }
+	// Unmarshal the byte slice into the AvailableTime struct
+	err := json.Unmarshal(bytes, c)
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
 
 func (c AvailableTime) Value() (driver.Value, error) {
-    // Marshal the AvailableTime struct into a byte slice
-    bytes, err := json.Marshal(c)
-    if err != nil {
-        return nil, err
-    }
+	// Marshal the AvailableTime struct into a byte slice
+	bytes, err := json.Marshal(c)
+	if err != nil {
+		return nil, err
+	}
 
-    return string(bytes), nil
+	return string(bytes), nil
 }
 
 type User struct {
@@ -51,18 +54,18 @@ type User struct {
 	AddressCity   string `gorm:"type:string(64)"`
 	AddressStreet string `gorm:"type:string(128)"`
 	AddressUnit   string `gorm:"type:string(32)"`
-	Zipcode		  string `gorm:"type:string(8)"`
+	Zipcode       string `gorm:"type:string(8)"`
 	// In order to reduce the number of google map api calls
 	// we store latitude and longitude of the user whenever
 	// his address is updated.
-	Lat           float64 // latitude of the user
-	Lon           float64 // longitude of the user
-	PhoneNum      string  `gorm:"type:string(10);not null"`
-	Email         string  `gorm:"type:string(50);not null"`
-	AvailableTimeSlots []AvailableTime `gorm:"type:jsonb;default:'[]'"`
-	PaymentMethod map[string]string `gorm:"type:jsonb;default:'[]'"`
-	CreatedAt     time.Time
-	UpdatedAt     time.Time
+	Lat                float64           // latitude of the user
+	Lon                float64           // longitude of the user
+	PhoneNum           string            `gorm:"type:string(10);not null"`
+	Email              string            `gorm:"type:string(50);not null"`
+	AvailableTimeSlots []AvailableTime   `gorm:"type:jsonb;default:'[]'"`
+	PaymentMethod      map[string]string `gorm:"type:jsonb;default:'[]'"`
+	CreatedAt          time.Time
+	UpdatedAt          time.Time
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {

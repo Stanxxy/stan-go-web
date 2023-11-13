@@ -1,19 +1,21 @@
 package store
 
-type Database interface {
-	RetrieveOne(m *any) (int64, error)
+import "github.com/Stanxxy/stan-go-web/internal/models"
 
-	Create(m *any) (int64, error)
+type UserDatabase interface {
+	RetrieveOne(m *models.User) (int64, error)
 
-	RetrieveMany(m *[]any) (int64, error)
+	Create(m *models.User) (int64, error)
 
-	RetrieveMany(conditions *map[string]interface{}, m *[]models.User) (int64, error)
+	RetrieveManyNoCondition(m *[]models.User) (int64, error)
 
-	UpdateMany(conditions *map[string]interface{}, m *[]models.User) (int64, error)
+	RetrieveManyWithCondition(conditions *map[string]any, m *[]models.User) (int64, error)
 
-	UpdateOne(m *any) (int64, error)
-	
-	Delete(m *any) (int64, error)
+	UpdateMany(conditions *map[string]any, m *[]models.User) (int64, error)
+
+	UpdateOne(m *models.User) (int64, error)
+
+	Delete(m *models.User) (int64, error)
 
 	Ping() error
 }

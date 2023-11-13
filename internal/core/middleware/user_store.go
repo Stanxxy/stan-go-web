@@ -10,26 +10,26 @@ import (
 // UserStore implements the UserStore interface
 type UserStore struct {
 	DB   *gorm.DB
-	conn *sql.DB
+	Conn *sql.DB
 }
 
 // Update the interface to satisfy CRUD ops
 func (s *UserStore) RetrieveOne(m *models.User) (int64, error) {
-	result := s.DB.First(m)
+	result := s.DB.First(m) // assuree we could do type conversion like this
 	return result.RowsAffected, result.Error
 }
 
 func (s *UserStore) Create(m *models.User) (int64, error) {
-	result := s.DB.Create(m)
+	result := s.DB.Create(*m)
 	return result.RowsAffected, result.Error
 }
 
-func (s *UserStore) RetrieveMany(m *[]models.User) (int64, error) {
+func (s *UserStore) RetrieveManyNoCondition(m *[]models.User) (int64, error) {
 	result := s.DB.Find(m)
 	return result.RowsAffected, result.Error
 }
 
-func (s *UserStore) RetrieveMany(conditions *map[string]interface{}, m *[]models.User) (int64, error) {
+func (s *UserStore) RetrieveManyWithCondition(conditions *map[string]any, m *[]models.User) (int64, error) {
 	result := s.DB.Where(conditions).Find(m)
 	return result.RowsAffected, result.Error
 }
@@ -40,15 +40,15 @@ func (s *UserStore) Delete(m *models.User) (int64, error) {
 }
 
 func (s *UserStore) UpdateOne(m *models.User) (int64, error) {
-	result := s.DB.Model(m).Updates(*m)
+	result := s.DB.Updates(*m)
 	return result.RowsAffected, result.Error
 }
 
-func (s *UserStore) UpdateMany(conditions *map[string]interface{}, m *[]models.User) (int64, error) {
-	result := s.DB.Model(m).Where(conditions).Updates(*m)
+func (s *UserStore) UpdateMany(conditions *map[string]any, m *[]models.User) (int64, error) {
+	result := s.DB.Where(conditions).Updates(*m)
 	return result.RowsAffected, result.Error
 }
 
 func (s *UserStore) Ping() error {
-	return s.conn.Ping()
+	return s.Conn.Ping()
 }

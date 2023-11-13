@@ -14,7 +14,7 @@ import (
 	"github.com/Stanxxy/stan-go-web/internal/cache"
 	"github.com/Stanxxy/stan-go-web/internal/i18n"
 	"github.com/Stanxxy/stan-go-web/internal/models"
-	"github.com/labstack/echo/v4"
+	echo "github.com/labstack/echo/v4"
 )
 
 type Server struct {

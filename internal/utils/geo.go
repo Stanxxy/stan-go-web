@@ -4,7 +4,7 @@ import (
 	"math"
 	"sort"
 
-	"github.com/Stanxxy/stan-go-web/internal/models/user"
+	"github.com/Stanxxy/stan-go-web/internal/models"
 )
 
 type Location struct {
@@ -12,7 +12,7 @@ type Location struct {
 	Lon float64
 }
 type Closness struct {
-	Item     *User
+	Item     *models.User
 	Distance float64
 }
 
@@ -37,14 +37,12 @@ func HaversineDistance(lat1, lon1, lat2, lon2 float64) float64 {
 	return distance
 }
 
-func SortLocationsBasedOnCloseness(referencePoint Location, comparatees []User) []User {
+func SortLocationsBasedOnCloseness(referencePoint Location, comparatees []models.User) []*models.User {
 	closnessList := make([]Closness, len(comparatees))
 
 	for i, comparatee := range comparatees {
 		currentLoc := Location{Lat: comparatee.Lat, Lon: comparatee.Lon}
 		distance := HaversineDistance(referencePoint.Lat, referencePoint.Lon, currentLoc.Lat, currentLoc.Lon)
-
-		comparatee.Distance = distance
 		closnessList[i] = Closness{Item: &comparatee, Distance: distance}
 	}
 
@@ -52,7 +50,7 @@ func SortLocationsBasedOnCloseness(referencePoint Location, comparatees []User) 
 		return closnessList[i].Distance < closnessList[j].Distance
 	})
 
-	ans := make([]User, len(closnessList))
+	ans := make([]*models.User, len(closnessList))
 
 	for i, closness := range closnessList {
 		ans[i] = closness.Item

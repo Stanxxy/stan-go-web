@@ -2,11 +2,13 @@ package controller
 
 import (
 	"net/http"
-	"github.com/rs/xid"
+
 	"github.com/Stanxxy/stan-go-web/internal/context"
+	"github.com/Stanxxy/stan-go-web/internal/core"
 	"github.com/Stanxxy/stan-go-web/internal/core/errors"
 	"github.com/Stanxxy/stan-go-web/internal/models"
-	"github.com/labstack/echo/v4"
+	"github.com/Stanxxy/stan-go-web/internal/utils"
+	echo "github.com/labstack/echo/v4"
 )
 
 // TODO:
@@ -15,7 +17,7 @@ import (
 // get the nearst address for Lat and Lon.
 // seek to solve it with front end and only pass lat and lon in backend.
 
-func (ctrl User) getBusiness(c echo.Context) {
+func GetBusiness(c echo.Context) error {
 	cc := c.(*context.AppContext)
 
 	var getBusinessRequest GetBusinessRequest
@@ -29,13 +31,20 @@ func (ctrl User) getBusiness(c echo.Context) {
 
 	businesses := []models.User{}
 
-	rowsAffected, err := cc.UserStore.RetrieveMany(&businesses)
-	// use SortLocationsBasedOnCloseness to Sort the distance of each business to current location
-	currentLocation := Location{
-		Lat: getBusinessRequest.LocationLat, 
-		Lon: getBusinessRequest.LocationLon
+	_, err = cc.UserStore.RetrieveManyNoCondition(&businesses)
+
+	if err != nil {
+		b := errors.NewBoom(errors.EntityQueryError, errors.ErrorText(errors.EntityQueryError), err)
+		c.Logger().Error(err)
+		return c.JSON(http.StatusInternalServerError, b)
 	}
-	userSortedByDistance := SortLocationsBasedOnCloseness(currentLocation, businesses)
+
+	// use SortLocationsBasedOnCloseness to Sort the distance of each business to current location
+	currentLocation := utils.Location{
+		Lat: getBusinessRequest.LocationLat,
+		Lon: getBusinessRequest.LocationLon,
+	}
+	userSortedByDistance := utils.SortLocationsBasedOnCloseness(currentLocation, businesses)
 
 	// convert to business slice
 	businessList := make([]Business, getBusinessRequest.Quantity) // we only need to get certain number of business
@@ -43,12 +52,12 @@ func (ctrl User) getBusiness(c echo.Context) {
 
 	for i, user := range userSortedByDistance {
 		// check open
-		
-		isOpen := CheckBusinessOpenRightNow(user)
-		if !isOpen && getBusinessRequest.Open {
+
+		isOpen := utils.CheckBusinessOpenRightNow(user)
+		if !isOpen && getBusinessRequest.Open != 0 {
 			continue
 		}
-		
+
 		// return a list of busispace to store ness
 		// We could leave an extra table to store reason and available time
 		reason := "No Reason"
@@ -57,30 +66,30 @@ func (ctrl User) getBusiness(c echo.Context) {
 		}
 
 		if i >= getBusinessRequest.StartNum {
-			businessList[i - StartNum] = Business {
-				Uid: user.ID,
-				BusinessName: user.Username,
+			businessList[i-getBusinessRequest.StartNum] = Business{
+				Uid:              user.ID,
+				BusinessName:     user.Username,
 				BusinessPhoneNum: user.PhoneNum,
 				BusinessLocation: GeologicalLocation{
-					Lat: User.Lat,
-					Lon: User.Lon
+					Lat: user.Lat,
+					Lon: user.Lon,
 				},
-				BusinessAvailableTime: user.AvailableTimeSlots
-				IsAvailable: isOpen,
-				Reason: reason 
+				BusinessAvailableTime: user.AvailableTimeSlots,
+				IsAvailable:           utils.Btoi(isOpen),
+				Reason:                reason,
 			}
 		}
 	}
 
 	// Do something with the user object
 	resp := GetBusinessResponse{
-		Code: 0, 
-		Message: "Address info updated",
-		Data: businessList}
+		Code:    0,
+		Message: "Get businesses succeeded",
+		Data:    businessList}
 	return c.JSON(http.StatusOK, resp)
 }
 
-func (ctrl User) getBusinessByName(c echo.Context) {	
+func GetBusinessByName(c echo.Context) error {
 	cc := c.(*context.AppContext)
 
 	var getBusinessByNameRequest GetBusinessByNameRequest
@@ -93,25 +102,25 @@ func (ctrl User) getBusinessByName(c echo.Context) {
 	}
 
 	// Based on what condition is given, we go for different query logic
-	queryCondition := make(map[string]string)
+	queryCondition := make(map[string]any)
 	// For cases when BusinessName is given, we use UserName to match BusinessName
 	if len(getBusinessByNameRequest.BusinessName) != 0 {
-		queryCondition["Username"] =  "%" + getBusinessByNameRequest.BusinessName + "%"
+		queryCondition["Username"] = "%" + getBusinessByNameRequest.BusinessName + "%"
 	}
 	if len(getBusinessByNameRequest.Zipcode) != 0 {
-		queryCondition["Zipcode"] =  getBusinessByNameRequest.Zipcode
+		queryCondition["Zipcode"] = getBusinessByNameRequest.Zipcode
 	}
 	if len(getBusinessByNameRequest.State) != 0 {
-		queryCondition["AddressState"] =  getBusinessByNameRequest.State
+		queryCondition["AddressState"] = getBusinessByNameRequest.State
 	}
 	if len(getBusinessByNameRequest.City) != 0 {
-		queryCondition["AddressCity"] =  getBusinessByNameRequest.City
+		queryCondition["AddressCity"] = getBusinessByNameRequest.City
 	}
 	businesses := []models.User{}
 	// For cass when zipcode is enabled, we search based on zipcode,
 	// the same logic applies to city and state
 
-	rowsAffected, err := cc.UserStore.RetrieveMany(queryCondition, &businesses)
+	_, err = cc.UserStore.RetrieveManyWithCondition(&queryCondition, &businesses)
 
 	if err != nil {
 		b := errors.NewBoom(errors.EntityUpdateError, errors.ErrorText(errors.EntityUpdateError), err)
@@ -119,7 +128,52 @@ func (ctrl User) getBusinessByName(c echo.Context) {
 		return c.JSON(http.StatusInternalServerError, b)
 	}
 
+	businessList := make([]Business, getBusinessByNameRequest.Quantity)
+
+	for i, user := range businesses {
+		// check open
+
+		isOpen := utils.CheckBusinessOpenRightNow(&user)
+		if !isOpen && getBusinessByNameRequest.Open != 0 {
+			continue
+		}
+
+		// return a list of busispace to store ness
+		// We could leave an extra table to store reason and available time
+		reason := "No Reason"
+		if !isOpen {
+			reason = "Not in operation time."
+		}
+
+		if i >= getBusinessByNameRequest.StartNum {
+			businessList[i-getBusinessByNameRequest.StartNum] = Business{
+				Uid:              user.ID,
+				BusinessName:     user.Username,
+				BusinessPhoneNum: user.PhoneNum,
+				BusinessLocation: GeologicalLocation{
+					Lat: user.Lat,
+					Lon: user.Lon,
+				},
+				BusinessAvailableTime: user.AvailableTimeSlots,
+				IsAvailable:           utils.Btoi(isOpen),
+				Reason:                reason,
+			}
+		}
+	}
+
 	// Do something with the user object
-	resp := UpdatePaymentInfoResponse{user.ID, "payment info updated"}
+	resp := GetBusinessByNameResponse{
+		Code:    0,
+		Message: "Get business by name succeeded",
+		Data:    businessList,
+	}
 	return c.JSON(http.StatusOK, resp)
+}
+
+// RegisterBusinessRoutes registers the authentication routes with the provided router.
+func RegisterBusinessRoutes(server *core.Server) {
+
+	g := server.Echo.Group("/api")
+	g.POST("/business/Getusiness", GetBusiness)
+	g.POST("/business/GetBusinessByName", GetBusinessByName)
 }

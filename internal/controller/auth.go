@@ -7,7 +7,7 @@ import (
 
 	"github.com/Stanxxy/stan-go-web/internal/core"
 	"github.com/Stanxxy/stan-go-web/internal/core/errors"
-	"github.com/labstack/echo/v4"
+	echo "github.com/labstack/echo/v4"
 	"golang.org/x/oauth2"
 )
 
@@ -38,14 +38,14 @@ var FacebookOAuthConfig = &oauth2.Config{
 // HandleGoogleLogin redirects the user to the Google authentication page.
 func HandleGoogleLogin(c echo.Context) error {
 	url := GoogleOAuthConfig.AuthCodeURL("state")
-	fmt.Printf(url)
+	fmt.Print(url)
 	return c.Redirect(http.StatusTemporaryRedirect, url)
 }
 
 // HandleGoogleCallback handles the callback from the Google authentication page.
 func HandleGoogleCallback(c echo.Context) error {
 	code := c.QueryParam("code")
-	fmt.Printf(code)
+	fmt.Print(code)
 	token, err := GoogleOAuthConfig.Exchange(c.Request().Context(), code)
 	if err != nil {
 		b := errors.NewBoom(errors.InternalError, errors.ErrorText(errors.InternalError), err)

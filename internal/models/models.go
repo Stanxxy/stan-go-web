@@ -7,17 +7,18 @@ import (
 	"time"
 
 	"database/sql"
-	"gorm.io/gorm"
-	"gorm.io/driver/postgres"
+
 	"github.com/Stanxxy/stan-go-web/config"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 // Model facilitate database interactions
 type Model struct {
 	models map[string]reflect.Value
 	isOpen bool
-	DB *gorm.DB
-	Conn *sql.DB
+	DB     *gorm.DB
+	Conn   *sql.DB
 }
 
 // NewModel returns a new Model without opening database connection
@@ -35,9 +36,7 @@ func (m *Model) IsOpen() bool {
 
 // OpenWithConfig opens database connection with the settings found in cfg
 func (m *Model) OpenWithConfig(cfg *config.Configuration) error {
-
-	dsn := "host=localhost user=goweb dbname=goweb port=26257 sslmode=disable TimeZone=US/Eastern"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(cfg.DSN), &gorm.Config{})
 
 	if err != nil {
 		return err
@@ -87,18 +86,18 @@ func (m *Model) Register(values ...interface{}) error {
 }
 
 func (m *Model) InitAllTables() {
-	for _, v := range m.models{
+	for _, v := range m.models {
 		m.DB.Migrator().DropTable(v.Interface())
-		m.DB.Migrator().CreateTable(v.Interface())	
+		m.DB.Migrator().CreateTable(v.Interface())
 	}
 }
 
 func (m *Model) InitConstraints() {
-
+	// TODO
 }
 
 func (m *Model) InitIndexies() {
-
+	// TODO
 }
 
 // AutoMigrateAll runs migrations for all the registered models
