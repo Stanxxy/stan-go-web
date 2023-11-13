@@ -3,8 +3,8 @@ package controller
 import (
 	"net/http"
 
-	"github.com/labstack/echo/v4"
 	"github.com/Stanxxy/stan-go-web/internal/context"
+	echo "github.com/labstack/echo/v4"
 )
 
 type Healthcheck struct{}
@@ -20,7 +20,7 @@ func (ctrl Healthcheck) GetHealthcheck(c echo.Context) error {
 	m := healthcheckReport{Health: "OK"}
 
 	dbCheck := cc.UserStore.Ping()
-	cacheCheck := cc.Cache.Ping()
+	cacheCheck := cc.CacheStore.Ping()
 
 	if dbCheck != nil {
 		m.Health = "NOT"

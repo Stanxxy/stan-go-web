@@ -1,4 +1,4 @@
-package controller
+package controller_test
 
 import (
 	"net/http"
@@ -8,6 +8,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 )
+
+// We should put aside health check
 
 func TestHealthcheck(t *testing.T) {
 	req := httptest.NewRequest(echo.GET, "/.well-known/health-check", nil)
