@@ -12,55 +12,48 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type UserFakeStore struct{}
-
-func (s *UserFakeStore) First(m *models.User) error {
-	return nil
-}
-func (s *UserFakeStore) Find(m *[]models.User) error {
-	return nil
-}
-func (s *UserFakeStore) Create(m *models.User) error {
-	return nil
-}
-func (s *UserFakeStore) Ping() error {
-	return nil
-}
-
 func TestSignUp(t *testing.T) {
+
 	// Given
-	body := map[string]any{
+	body := map[string]string{
 		"account":   "dummy_account",
 		"password":  "dummy_password",
 		"email":     "stan.x.liu@gmail.com", // save the real email for blocking test cases
-		"phoenNum":  "19939283432",
+		"phoneNum":  "9939283432",
 		"checkCode": "dummy_checkcode",
-		"zipcode":   03002,
+		"zipcode":   "03002",
 	}
 	jsonData, _ := json.Marshal(body) // ignore the error
 
 	// When
-	req := httptest.NewRequest(echo.POST, "/users/signUp", bytes.NewReader(jsonData))
+	req := httptest.NewRequest(echo.POST, "/api/user/signUp", bytes.NewReader(jsonData))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	e.server.Echo.ServeHTTP(rec, req)
 
 	// Then
+
 	assert.Equal(t, http.StatusOK, rec.Code)
 
 	// Search in the database to check if the write succeeded or not
 	user := models.User{
-		Username: body["account"].(string),
-		Password: body["password"].(string),
-		Email:    body["email"].(string),
-		PhoneNum: body["phoneNum"].(string),
-		Zipcode:  body["zipcode"].(string),
+		Account:  body["account"],
+		Password: body["password"],
+		Email:    body["email"],
+		PhoneNum: body["phoneNum"],
+		Zipcode:  body["zipcode"],
 	}
 	rowsAffected, err := e.appContext.UserStore.RetrieveOne(&user)
 	assert.Equal(t, nil, err)
-	assert.Equal(t, rowsAffected, 1)
+	assert.Equal(t, rowsAffected, int64(1))
+}
+
+func initData() {
+	// If we need to have pre test data set up inin database just initialize them here
 }
 
 func TestUpdateAddress(t *testing.T) {
+	initData()
 	// s := echo.New()
 	// // g := s.Group("/api")
 

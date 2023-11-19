@@ -36,7 +36,7 @@ func (m *Model) IsOpen() bool {
 
 // OpenWithConfig opens database connection with the settings found in cfg
 func (m *Model) OpenWithConfig(cfg *config.Configuration) error {
-	db, err := gorm.Open(postgres.Open(cfg.DSN), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(cfg.DNS), &gorm.Config{})
 
 	if err != nil {
 		return err

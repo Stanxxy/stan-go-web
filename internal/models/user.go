@@ -21,9 +21,13 @@ type AvailableTime struct {
 
 func (c *AvailableTime) Scan(value interface{}) error {
 	// Convert the value to a byte slice
+	// if value == nil {
+	// 	c = nil
+	// 	return nil
+	// }
 	bytes, ok := value.([]byte)
 	if !ok {
-		return errors.New("Failed to scan AvailableTime")
+		return errors.New("failed to scan AvailableTime")
 	}
 
 	// Unmarshal the byte slice into the AvailableTime struct
@@ -35,6 +39,7 @@ func (c *AvailableTime) Scan(value interface{}) error {
 	return nil
 }
 
+// Value return json value, implement driver.Valuer interface
 func (c AvailableTime) Value() (driver.Value, error) {
 	// Marshal the AvailableTime struct into a byte slice
 	bytes, err := json.Marshal(c)
@@ -62,8 +67,8 @@ type User struct {
 	Lon                float64           // longitude of the user
 	PhoneNum           string            `gorm:"type:string(10);not null"`
 	Email              string            `gorm:"type:string(50);not null"`
-	AvailableTimeSlots []AvailableTime   `gorm:"type:jsonb;default:'[]'"`
-	PaymentMethod      map[string]string `gorm:"type:jsonb;default:'[]'"`
+	AvailableTimeSlots []AvailableTime   `gorm:"type:jsonb;"`
+	PaymentMethod      map[string]string `gorm:"type:jsonb;"`
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
 }

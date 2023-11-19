@@ -1,83 +1,83 @@
 package models
 
 import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
 	"time"
-    "errors"
+
+	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
-    "database/sql/driver"
-    "encoding/json"
-    "github.com/google/uuid"
 )
 
 type DetailedOrderItem struct {
-    Fid string
-    Number int
-	Price decimal.Decimal
+	Fid    string
+	Number int
+	Price  decimal.Decimal
 }
 
 func (c *DetailedOrderItem) Scan(value interface{}) error {
-    // Convert the value to a byte slice
-    bytes, ok := value.([]byte)
-    if !ok {
-        return errors.New("Failed to scan DetailedOrderItem")
-    }
+	// Convert the value to a byte slice
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New("failed to scan DetailedOrderItem")
+	}
 
-    // Unmarshal the byte slice into the DetailedOrderItem struct
-    err := json.Unmarshal(bytes, c)
-    if err != nil {
-        return err
-    }
+	// Unmarshal the byte slice into the DetailedOrderItem struct
+	err := json.Unmarshal(bytes, c)
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
 
 func (c DetailedOrderItem) Value() (driver.Value, error) {
-    // Marshal the DetailedOrderItem struct into a byte slice
-    bytes, err := json.Marshal(c)
-    if err != nil {
-        return nil, err
-    }
+	// Marshal the DetailedOrderItem struct into a byte slice
+	bytes, err := json.Marshal(c)
+	if err != nil {
+		return nil, err
+	}
 
-    return string(bytes), nil
+	return string(bytes), nil
 }
 
 type StateHistoryItem struct {
-    State OrderState
-    Time time.Time
+	State OrderState
+	Time  time.Time
 }
 
 func (c *StateHistoryItem) Scan(value interface{}) error {
-    // Convert the value to a byte slice
-    bytes, ok := value.([]byte)
-    if !ok {
-        return errors.New("Failed to scan StateHistoryItem")
-    }
+	// Convert the value to a byte slice
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New("failed to scan StateHistoryItem")
+	}
 
-    // Unmarshal the byte slice into the CustomType struct
-    err := json.Unmarshal(bytes, c)
-    if err != nil {
-        return err
-    } 	
+	// Unmarshal the byte slice into the CustomType struct
+	err := json.Unmarshal(bytes, c)
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }
 
 func (c StateHistoryItem) Value() (driver.Value, error) {
-    // Marshal the CustomType struct into a byte slice
-    bytes, err := json.Marshal(c)
-    if err != nil {
-        return nil, err
-    }
+	// Marshal the CustomType struct into a byte slice
+	bytes, err := json.Marshal(c)
+	if err != nil {
+		return nil, err
+	}
 
-    return string(bytes), nil
+	return string(bytes), nil
 }
 
-
-type OrderDetails struct{
-	Oid        uuid.UUID `gorm:"type:uuid;primaryKey"`
-	OrderItems   []DetailedOrderItem  `gorm:"type:jsonb;default:'[]'"`
-	StateHistory   []StateHistoryItem  `gorm:"type:jsonb;default:'[]'"`
-	Note	  string `gorm:"type:string(256)"`
-    CreatedAt time.Time
-	UpdatedAt time.Time
+type OrderDetails struct {
+	Oid          uuid.UUID           `gorm:"type:uuid;primaryKey"`
+	OrderItems   []DetailedOrderItem `gorm:"type:jsonb;default:'[]'"`
+	StateHistory []StateHistoryItem  `gorm:"type:jsonb;default:'[]'"`
+	Note         string              `gorm:"type:string(256)"`
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }

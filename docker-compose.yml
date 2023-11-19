@@ -6,7 +6,7 @@ services:
     command: start --insecure
     ports:
       - "26257:26257"
-      - "8111:8080"
+      - "8112:8080"
     volumes:
       - ./cockroach-data/roach1:/cockroach/cockroach-data
     networks:
@@ -39,6 +39,20 @@ services:
       roachnet:
         aliases:
           - roach3
+
+  roach-test:
+    container_name: roach-test
+    image: cockroachdb/cockroach:v19.2.1
+    command: start --insecure
+    ports:
+      - "26258:26257"
+      - "8111:8080"
+    volumes:
+      - ./cockroach-data/roach-test:/cockroach/cockroach-data
+    networks:
+      roachnet:
+        aliases:
+          - roach-test
 
   redis:
     ports:

@@ -17,20 +17,23 @@ import (
 )
 
 var e struct {
-	config     *config.Configuration
-	logger     *log.Logger
-	server     *core.Server
-	testUser   *models.User
-	appContext *context.AppContext
+	config               *config.Configuration
+	logger               *log.Logger
+	server               *core.Server
+	userPlaceHolder      *models.User   // the space that is used to get retrieved object from database
+	userSlicePlaceHolder *[]models.User // the space that is used to get retrieved object from database
+	appContext           *context.AppContext
 }
 
 func TestMain(m *testing.M) {
 	e.config = &config.Configuration{
-		ConnectionString: "host=localhost user=goweb dbname=goweb port=26257 sslmode=disable TimeZone=US/Eastern",
-		TemplateDir:      "../templates/*.html",         // we dont have template dir right now
-		LayoutDir:        "../templates/layouts/*.html", // we dont have layouts dir right now
-		Dialect:          "postgres",
-		RedisAddr:        ":6379",
+		// ConnectionString: "host=localhost user=goweb dbname=goweb port=26257 sslmode=disable TimeZone=US/Eastern",
+		DNS:         "host=localhost user=goweb_test dbname=goweb_test port=26258 sslmode=disable TimeZone=US/Eastern",
+		Address:     "127.0.0.1:8090",
+		TemplateDir: "../templates/*.html",         // we dont have template dir right now
+		LayoutDir:   "../templates/layouts/*.html", // we dont have layouts dir right now
+		Dialect:     "postgres",
+		RedisAddr:   ":6379",
 	}
 
 	e.server = core.NewServer(e.config)
@@ -54,7 +57,8 @@ func setup() {
 	e.server.Echo.GET("/.well-known/health-check", healthCtrl.GetHealthcheck)
 	e.server.Echo.GET("/.well-known/metrics", echo.WrapHandler(promhttp.Handler())) // what does this do?
 
-	e.server.GetModelRegistry().InitAllTables()
+	e.server.InitDB()
+	// e.server.GetModelRegistry().InitAllTables()
 
 	e.appContext = &context.AppContext{
 		CacheStore: &mid.CacheStore{Cache: e.server.GetCache()},
@@ -65,8 +69,10 @@ func setup() {
 
 	// test data
 	// Here we initialize some test data that should be in database prior to any test running
-	user := models.User{Username: "Peter"}
-	e.testUser = &user
+	user := models.User{}
+	e.userPlaceHolder = &user
+	userList := []models.User{user}
+	e.userPlaceHolder = &userList[0]
 }
 
 func tearDown() {

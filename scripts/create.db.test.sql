@@ -1,0 +1,4 @@
+CREATE USER IF NOT EXISTS goweb_test;
+DROP DATABASE IF EXISTS goweb_test;
+CREATE DATABASE goweb_test;
+GRANT ALL ON DATABASE goweb_test TO goweb_test;

@@ -15,12 +15,12 @@ type UserStore struct {
 
 // Update the interface to satisfy CRUD ops
 func (s *UserStore) RetrieveOne(m *models.User) (int64, error) {
-	result := s.DB.First(m) // assuree we could do type conversion like this
+	result := s.DB.Limit(1).Where(m).Find(m) // assuree we could do type conversion like this
 	return result.RowsAffected, result.Error
 }
 
 func (s *UserStore) Create(m *models.User) (int64, error) {
-	result := s.DB.Create(*m)
+	result := s.DB.Create(m)
 	return result.RowsAffected, result.Error
 }
 
